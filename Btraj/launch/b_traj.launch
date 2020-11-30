@@ -1,0 +1,56 @@
+<launch>
+
+<arg name="map_size_x" default="50.0"/>
+<arg name="map_size_y" default="50.0"/>
+<arg name="map_size_z" default=" 3.0"/>
+
+<arg name="init_x" default="-20.0"/>
+<arg name="init_y" default="-20.0"/>
+<arg name="init_z" default="  0.5"/>
+
+  <node pkg="bezier_planer" type="b_traj_node" name="b_traj_node" output="screen">
+
+      <param name="optimization/poly_order"  value="8"/> 
+      <param name="optimization/min_order"   value="2.5"/> 
+      <param name="map/x_size"       value="$(arg map_size_x)"/>
+      <param name="map/y_size"       value="$(arg map_size_y)"/>
+      <param name="map/z_size"       value="$(arg map_size_z)"/>
+      
+      <param name="map/z_local_size" value="16.0"/>
+      <param name="map/y_local_size" value="16.0"/>
+      <param name="map/z_local_size" value="5.0" />
+
+      <param name="map/margin"       value="0.8" />
+      <param name="planning/init_x"  value="$(arg init_x)"/>
+      <param name="planning/init_y"  value="$(arg init_y)"/>
+      <param name="planning/init_z"  value="$(arg init_z)"/>
+      <param name="planning/inflate_iter"  value="200"  />
+      <param name="planning/step_length"   value="1"    />
+      <param name="planning/cube_margin"   value="0.0"  />
+      <param name="planning/max_vel"       value="2.0"  />
+      <param name="planning/max_acc"       value="1.0"  />
+      <param name="planning/check_horizon" value="10.0" />
+      <param name="planning/stop_horizon"  value=" 3.0" />
+      <param name="planning/is_limit_vel"  value="true" />
+      <param name="planning/is_limit_acc"  value="false"/>
+      <param name="planning/is_use_fm"     value="true" />
+      <param name="vis/vis_traj_width" value="0.15"/>
+      <param name="vis/is_proj_cube"   value="false"/>
+  </node>
+
+  <node pkg  = "bezier_planer" type = "main_server" output = "screen" name = "main_server"/>
+
+
+  <node pkg="odom_visualization" name="odom_visualization_ukf_" type="odom_visualization" output="screen">
+      <remap from="~odom" to="/car_odo"/>
+      <param name="color/a" value="0.8"/>    
+      <param name="color/r" value="0.0"/>        
+      <param name="color/g" value="0.0"/>        
+      <param name="color/b" value="0.0"/>       
+      <param name="covariance_scale" value="100.0"/>       
+      <param name="robot_scale" value="1.0"/>   
+  </node>
+
+  <node name="rvizvisualisation" pkg="rviz" type="rviz" output="log" args="-d $(find bezier_planer)/launch/rviz_config/simulation.rviz" />
+
+</launch>
