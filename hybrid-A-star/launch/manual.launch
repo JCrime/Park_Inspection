@@ -1,0 +1,18 @@
+<launch>
+ <!-- Turn on hybrid_astar node -->
+  <arg name="track_mode" default="local" />
+
+ <node name="map_server" pkg="map_server" type="map_server" args="$(find hybrid_astar)/maps/map.yaml" />
+
+ <node name="hybrid_astar" pkg="hybrid_astar" type="hybrid_astar" output="screen"/>
+
+ <node name="rviz" pkg="rviz" type="rviz" args="-d $(find hybrid_astar)/launch/config.rviz" />
+ <node name="gnss_handler_node" pkg="sensor_handler" type="gnss_handler_node"/>
+
+
+ <node name="move_base" pkg="move_base" type="move_base" output="screen" />
+
+ <node name="track_node" pkg="move_base" type="track_node" output="screen" >
+     <param name="track_mode" value="$(arg track_mode)" />
+ </node>
+</launch>

@@ -1,0 +1,11 @@
+<launch>
+
+    <arg name="track_mode" default="global" />
+
+    <node name="move_base" pkg="move_base" type="move_base" output="screen" />
+
+    <node name="track_node" pkg="move_base" type="track_node" output="screen" >
+	<param name="track_mode" value="$(arg track_mode)" />
+    </node>
+
+</launch>
